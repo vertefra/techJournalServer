@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3001;
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
-const passport = require('./config/passport')();
+const passport = require('./services/passport')();
 
 /* Database */
 const MONGODB_URI = process.env.MONGODB_URI;

@@ -5,7 +5,7 @@ const Strategy = passportJWT.Strategy;
 
 const config = require("./config");
 
-const User = require("../models/user.js");
+// const User = require("../models/user.js");
 
 const params = {
   secretOrKey: config.jwtSecret,
