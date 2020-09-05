@@ -4,9 +4,9 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const mongoose = require('mongoose');
-// const path = require('path');
-// const cors = require('cors');
-// const passport = require('./config/passport')();
+const path = require('path');
+const cors = require('cors');
+const passport = require('./config/passport')();
 
 /* Database */
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -21,9 +21,9 @@ db.on('open', () => {
 });
 
 /* Middleware */
-// app.use(cors());
-// app.use(express.json());
-// app.use(passport.initialize());
+app.use(cors());
+app.use(express.json());
+app.use(passport.initialize());
 
 /* Controller */
 app.get('/', (req, res) => {
