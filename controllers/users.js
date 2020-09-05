@@ -4,7 +4,7 @@ const jwt = require("jwt-simple");
 const bcrypt = require("bcrypt");
 const passport = require("../services/passport");
 const config = require("../services/config");
-// const User = require('../models/user')
+const User = require("../models/userTest");
 
 router.post("/signup", (req, res) => {
   const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -104,7 +104,9 @@ router.get("/:id", (req, res) => {
 // =========================================== //
 
 router.post("/", (req, res) => {
+  console.log("Hitting users routes");
   User.create(req.body, (error, createdUser) => {
+    console.log(createdUser);
     createdUser
       ? res.status(200).json(createdUser)
       : res.status(500).json({ error: "failed creating a new user: " + error });

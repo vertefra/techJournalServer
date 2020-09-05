@@ -6,7 +6,6 @@ const PORT = process.env.PORT || 3001;
 const mongoose = require("mongoose");
 const path = require("path");
 const cors = require("cors");
-const { userInfo } = require("os");
 const passport = require("./services/passport")();
 
 /* Database */
