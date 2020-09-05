@@ -26,6 +26,7 @@ router.post("/signup", (req, res) => {
                 id: createdUser.id,
               };
               let token = jwt.encode(payload, config.jwtSecret);
+              createdUser.password = undefined                              // erasing password before sending to client
               res.status(200).json({ token: token, user: createdUser });    // if create a new user send also all the info for the user
             } else {
               res.status(401).json({error: "failed to create user" });
