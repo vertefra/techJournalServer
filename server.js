@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 3001;
 const mongoose = require("mongoose");
 const path = require("path");
 const cors = require("cors");
+const { userInfo } = require("os");
 const passport = require("./services/passport")();
 
 /* Database */
@@ -31,12 +32,21 @@ app.use(passport.initialize());
 //    USER CONTROLLER => /users                //
 // =========================================== //
 //
-// controls creates, updates, delete for User
+// Controls: creates, updates, delete for User
 // model. /user/signup creates & aauthenticate
 // a new user, /users/login verifies authentic.
-// credentials and returns the atuth user
+// credentials and returns the auth user
 
 app.use("/users", require("./controllers/users"));
+
+// =========================================== //
+//    ENTRIES CONTROLLER => /users/:id/entries //
+// =========================================== //
+//
+// Controls: create, udates, delete for entries
+// belonging to /users/:id.
+
+app.use("/users/:id/entries", require("./controllers/entries"));
 
 /* Listener */
 app.listen(PORT, () => {
