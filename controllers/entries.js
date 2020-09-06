@@ -1,9 +1,8 @@
 const express = require("express");
 const { returnParams } = require("../services/utils");
-const { v4: uuidv4 } = require("uuid");
+// const { v4: uuidv4 } = require("uuid");
 const router = express.Router();
 const Entry = require("../models/entry");
-const { update } = require("../models/entry");
 
 // ======================================================== //
 //    Get all entries => /users/:id/entries GET             //
