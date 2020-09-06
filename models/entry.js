@@ -5,7 +5,6 @@ const EntrySchema = new Schema(
   {
     entries: [
       {
-        id: { type: String, required: true },
         title: { type: String, required: true },
         content: { type: String, required: true },
       },
