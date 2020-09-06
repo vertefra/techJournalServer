@@ -47,6 +47,25 @@ app.use("/users", require("./controllers/users"));
 
 app.use("/users/:id/entries", require("./controllers/entries"));
 
+// =========================================== //
+//    SKILLS CONTROLLER => /skills             //
+// =========================================== //
+//
+// Controls: create, updates, delete for a
+// general skills database. User database will
+// reference it creating a one-to-many relation
+
+app.use("/skills", require("./controllers/skills"));
+
+// =========================================== //
+//   SKILLS CTRl ON USER => /users/:id/skills  //
+// =========================================== //
+//
+// Controls: create, updates, delete for a
+// skills for a user with id = :id
+
+app.use("/users/:id/skills", require("./controllers/userSkills"));
+
 /* Listener */
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
