@@ -7,6 +7,8 @@ const UserSchema = new Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: true },
     journalEntries: { type: mongoose.Schema.Types.ObjectId, ref: "Entry" },
+    skills: [{ type: mongoose.Schema.Types.ObjectId, ref: "Skill" }],
+    eventsWillAttend: [{ type: mongoose.Schema.Types.ObjectId, ref: "Events" }],
   },
   { timestamps: true }
 );
