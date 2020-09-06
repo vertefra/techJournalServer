@@ -28,6 +28,7 @@
     "mongoose": "^5.10.3",
     "parser": "^0.1.4",
     "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "uuid": "^8.3.0"
   }
 }
