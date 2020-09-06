@@ -23,6 +23,22 @@ router.get("/", (req, res) => {
 //    Get one Skill  => /users/:id/skills/:id GET        //
 // ===================================================== //
 
+router.get("/:id", (req, res) => {
+  const [user_id, skill_id] = returnParams(req);
+  User.findById(user_id, (error, foundUser) => {
+    if (foundUser) {
+      const skill = foundUser.skills.find(
+        (skill) => skill._id.toString() === skill_id
+      );
+      res.status(200).json(skill);
+    } else {
+      res
+        .status(404)
+        .json({ error: `Cant find skill with id: ${skill_id}: `, error });
+    }
+  }).populate("skills");
+});
+
 // ===================================================== //
 //    Add one Skill  => /users/:id/skills POST           //
 // ===================================================== //
@@ -31,6 +47,8 @@ router.get("/", (req, res) => {
 // first look into the Skill model to check if the skill
 // is already present. If not creates a new skill and add
 // the id of the created skill to the user in 'skills'
+
+// TODO ADDING A COUNT INCREMENT TO SHOW SKILLS POPOLARITY
 
 router.post("/", (req, res) => {
   const user_id = returnParams(req)[0];
