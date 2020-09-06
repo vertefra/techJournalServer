@@ -1,12 +1,8 @@
 const express = require("express");
 const { returnParams } = require("../services/utils");
+const { v4: uuidv4 } = require("uuid");
 const router = express.Router();
-const Entry = require("../models/test");
-
-router.get("/:id", (req, res) => {
-  console.log(returnParams(req));
-  res.json({ success: true });
-});
+const Entry = require("../models/entry");
 
 // ======================================================== //
 //    Get all entries => /users/:id/entries GET             //
@@ -22,23 +18,9 @@ router.get("/", (req, res) => {
   console.log(user_id);
   Entry.findOne({ user_id }, (error, entry) => {
     entry
-      ? res.status(200).json({ entries: entry.entries })
+      ? res.status(200).json({ entries: entry })
       : res.status(404).json({ error: "Entry not found: " + error });
   });
-});
-
-// ======================================================== //
-//    Get one entry => /users/:id/entries/:id GET           //
-// ======================================================== //
-//
-// Get the entries with id entry/:id for a user with id
-// users/:id. user_id and entry_id are taken from the
-// request with returnParams() function. For more info check
-// returnParams in services/utils.js
-
-router.get("/:id", (req, res) => {
-  const [user_id, entry_id] = returnParams(req);
-  Entry.findOne({ user_id });
 });
 
 // ======================================================== //
@@ -51,8 +33,22 @@ router.get("/:id", (req, res) => {
 // returnParams in services/utils.js
 
 router.post("/", (req, res) => {
-  const [user_id, entry_id] = returnParams(req);
-  Entry.create();
+  const user_id = returnParams(req)[0];
+  req.body.id = uuidv4(); // generates a unique id
+  console.log("Hitting Add one Entry route: ", req.body);
+  Entry.updateOne(
+    { user_id },
+    {
+      $push: { entries: req.body },
+    },
+    (error, updatedEntry) => {
+      updatedEntry
+        ? res.status(200).json(updatedEntry)
+        : res
+            .status(500)
+            .json({ error: "could not update the entry: " + error });
+    }
+  );
 });
 
 module.exports = router;

@@ -4,7 +4,9 @@ const jwt = require("jwt-simple");
 const bcrypt = require("bcrypt");
 const passport = require("../services/passport");
 const config = require("../services/config");
-const User = require("../models/userTest");
+const User = require("../models/user");
+const { addEntryRef } = require("../services/utils");
+const Entry = require("../models/entry");
 
 router.post("/signup", (req, res) => {
   const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -21,12 +23,20 @@ router.post("/signup", (req, res) => {
         console.log("Running create user");
         User.create(req.body, (error, createdUser) => {
           if (createdUser) {
-            const payload = {
-              id: createdUser.id,
-            };
-            let token = jwt.encode(payload, config.jwtSecret);
-            createdUser.password = undefined; // erasing password before sending to client
-            res.status(200).json({ token: token, user: createdUser }); // if create a new user send also all the info for the user
+            addEntryRef(createdUser._id, (error, updatedUser) => {
+              if (updatedUser) {
+                const payload = {
+                  id: createdUser.id,
+                };
+                let token = jwt.encode(payload, config.jwtSecret);
+                res.status(200).json({ token: token, user: createdUser });
+              } else {
+                res.status(500).json({
+                  error: "failed to create reference from entryes to user: ",
+                  error,
+                });
+              }
+            });
           } else {
             res.status(401).json({ error: "failed to create user" });
           }
@@ -132,12 +142,35 @@ router.put("/:id", (req, res) => {
 // =========================================== //
 //    Delete one user  => /users/:id DELETE    //
 // =========================================== //
+//
+// Once the user is found it looks also for the
+// entry with the user_id equal to the _id of
+// the deleted user and romoves it
 
 router.delete("/:id", (req, res) => {
   User.findByIdAndDelete(req.params.id, (error, deletedUser) => {
-    deletedUser
-      ? res.status(200).json(deletedUser)
-      : res.status(500).json({ error: "failed deleting the user " + error });
+    // deletedUser
+    //   ? res.status(200).json(deletedUser)
+    //   :
+    if (deletedUser) {
+      Entry.findByIdAndDelete(
+        deletedUser.journalEntries,
+        (error, deletedEntries) => {
+          deletedEntries
+            ? res.status(200).json({
+                message:
+                  "user and entries deleted succesfully: " + deletedEntries,
+              })
+            : res.status(404).json({
+                error:
+                  "User deleted, but something prevent from deleting the entries " +
+                  error,
+              });
+        }
+      );
+    } else {
+      res.status(500).json({ error: "failed deleting the user " + error });
+    }
   });
 });
 
