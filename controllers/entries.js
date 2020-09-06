@@ -100,4 +100,28 @@ router.put("/:id", (req, res) => {
     }
   );
 });
+
+// ======================================================== //
+//    show one entry => /users/:id/entries/:id GET          //
+// ======================================================== //
+//
+// Gets the entry with id === entries/:id from the Entry
+// document associated with the user === users/:id
+// I retrieve all the entries and the I filter the entry
+// tham i'm looking for with .find() method.
+
+router.get("/:id", (req, res) => {
+  const [user_id, entry_id] = returnParams(req);
+  Entry.findOne({ user_id }, (error, foundEntry) => {
+    if (foundEntry) {
+      const entry = foundEntry.entries.find(
+        (entry) => entry._id.toString() === entry_id
+      );
+      res.status(200).json(entry);
+    } else {
+      res.status(404).json({ error: "entry not fouund " + error });
+    }
+  }).select("entries");
+});
+
 module.exports = router;
