@@ -68,7 +68,7 @@ router.post("/login", (req, res) => {
           };
           let token = jwt.encode(payload, config.jwtSecret);
           console.log(token);
-          user.password = undefined; // erasing the password before to send it to client
+          user.password = undefined; // erasing password
           res.json({ token: token, user: user }); // sending also the user data with the token to client
         } else {
           res.sendStatus(401).json({ error: "Wrong password" });

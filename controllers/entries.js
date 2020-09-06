@@ -27,15 +27,12 @@ router.get("/", (req, res) => {
 //    Add one entry => /users/:id/entries POST              //
 // ======================================================== //
 //
-// Get the entries with id entry/:id for a user with id
-// users/:id. user_id and entry_id are taken from the
-// request with returnParams() function. For more info check
-// returnParams in services/utils.js
+// Add one entry from req.body to Entry model associated
+// with user_id === :id
 
 router.post("/", (req, res) => {
   const user_id = returnParams(req)[0];
   // req.body.id = uuidv4(); // generates a unique id
-  console.log("Hitting Add one Entry route: ", req.body);
   Entry.updateOne(
     { user_id },
     {
@@ -46,7 +43,31 @@ router.post("/", (req, res) => {
         ? res.status(200).json({ newEntry: req.body, result: updatedEntry })
         : res
             .status(500)
-            .json({ error: "could not update the entry: " + error });
+            .json({ error: "Could not update the entry: " + error });
+    }
+  );
+});
+
+// ======================================================== //
+//    delete one entry => /users/:id/entries/:id DELETE     //
+// ======================================================== //
+//
+// Remove the entry with id === entries/:id from the Entry
+// document associated with the user === users/:id
+
+router.delete("/:id", (req, res) => {
+  const [user_id, entry_id] = returnParams(req);
+  Entry.updateOne(
+    { user_id },
+    {
+      $pull: { entries: { _id: entry_id } },
+    },
+    (error, updatedEntry) => {
+      updatedEntry
+        ? res.status(200).json({ deletedEntry: true, result: updatedEntry })
+        : res
+            .status(500)
+            .json({ error: "Could not delete the entry: " + error });
     }
   );
 });
