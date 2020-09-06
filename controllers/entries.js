@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
   console.log(user_id);
   Entry.findOne({ user_id }, (error, entry) => {
     entry
-      ? res.status(200).json({ entries: entry })
+      ? res.status(200).json({ entries: entry.entries })
       : res.status(404).json({ error: "Entry not found: " + error });
   });
 });
@@ -34,7 +34,7 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
   const user_id = returnParams(req)[0];
-  req.body.id = uuidv4(); // generates a unique id
+  // req.body.id = uuidv4(); // generates a unique id
   console.log("Hitting Add one Entry route: ", req.body);
   Entry.updateOne(
     { user_id },
@@ -43,7 +43,7 @@ router.post("/", (req, res) => {
     },
     (error, updatedEntry) => {
       updatedEntry
-        ? res.status(200).json(updatedEntry)
+        ? res.status(200).json({ newEntry: req.body, result: updatedEntry })
         : res
             .status(500)
             .json({ error: "could not update the entry: " + error });
