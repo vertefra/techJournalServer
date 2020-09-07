@@ -54,11 +54,13 @@ const addEntryRef = (userId, cb) => {
 // =========================================== //
 //
 // Check an event object for undefined fields
-// or missing keys
+// missing or wrong keys
 
 const parseEventObject = (eventObj = {}) => {
   let errors = false;
-  console.log("starting parser with object ", eventObj);
+  console.log("=====================================");
+  console.log("Starting event object parser with ==>", eventObj);
+  console.log();
   const requiredKeys = [
     "owner_id",
     "name",
@@ -80,12 +82,14 @@ const parseEventObject = (eventObj = {}) => {
     let errors = false;
     if (requiredKeys.includes(key)) {
       if (eventObj[key]) {
-        console.log(key, "is ok to me");
+        console.log(key, "seems good to me");
       } else {
+        console.log(key, "is undefined!");
         errorObj["undefinedKeys"] += `-${key}-`;
         errors = true;
       }
     } else {
+      console.log(key, "is wrong!");
       errorObj["wrongKeys"] += `-${key}-`;
       errors = true;
     }
@@ -93,11 +97,13 @@ const parseEventObject = (eventObj = {}) => {
 
   requiredKeys.forEach((key) => {
     if (!eventKeys.includes(key)) {
+      console.log("you are missing: ", key);
       errorObj["missingKeys"] += `-${key}-`;
       errors = true;
     }
   });
-
+  console.log();
+  console.log(errors ? "some errors founded" : "you'are good to go man!");
   return errors === false ? eventObj : errorObj;
 };
 
