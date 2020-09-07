@@ -8,7 +8,7 @@
 
 ## API endpoints
 
-###<u>users endpoints</u>
+##<u>users endpoints</u>
 
 #### /users/signup POST
 
@@ -34,7 +34,7 @@
         - journalEntries
         - skills
         - createdEvents
-        - eventsWillAttend (still working on)
+        - eventsWillAttend 
 
   this option will return the user object with this extra info connected
   avoiding and extra call for them.
@@ -95,7 +95,7 @@
 
 - delete an user and the associated entries. **Note:** removing a user wont remove the skills from teh skills document because skills are used globally and don't have a unique relation with the user like the entries do.
 
-###<u>user entries endpoints</u>
+##<u>user entries endpoints</u>
 
 #### /users/:id/entries POST
 
@@ -118,7 +118,7 @@
 
 - modify the entry with id **entries/:id** belonging to the user with id **users/:id**
 
-###<u>user skills endpoints</u>
+##<u>user skills endpoints</u>
 
 **This endpoints affects the skills associated with a user**
 
@@ -138,3 +138,81 @@
 #### /users/:id/skills/:id DELETE
 
 - delete the reference to the skill object for the skill with id **entries/:id** belonging to the user with id **users/:id** **Important** this will not remove the skill from the skill domcument.
+
+##<u>user events endpoints</u>
+
+#### Creating a new event.
+    the creation of a new event is associated with a "user owner".
+    the route to create a new event is:
+
+####    /users/:id/events POST
+                        
+                        
+        Needs an object in the body similar to this
+
+        
+
+    {
+	"title":"My second created Event",
+	"name":"this event",
+	"description":"a fun event",
+	"date": "26 april",
+	"location": "New York",
+	"host":{
+		"name":"francesco",
+		"title":"yep",
+		"email":"verte.fra@gmail.com",
+		"phoneNumber":"3334444545"
+	},
+	"speaker":{
+		"name":"Max",
+		"title":"Doctor"
+	}
+}
+
+    **the route provides a parse function for the object** that will return missing, invalid or               undefined key to ensure data consistency. 
+
+#### See all the events  <u>users/:id/events GET</u>
+    retrieving all the events associated with one user.
+    you can choose, as on **option** to retrieve only the one the he will attend
+    or the one that he will partecipate. If you don't specify the default option
+    returns the events that he will partecipate.
+    
+    **options**
+        
+        `users/:id/events?events=createdEvents` returns all the created events
+        `users/:id/events?events=eventsWillAttend` returns all the events that the user will attend
+  
+  
+#### Show one event
+    retrieving the event with id **/events/:id** associated with one user.
+    you can choose, as on **option** to search between the events that the userr created or that will attend. If you don't specify the default option
+    will look in both.
+
+####    <u>users/:id/events GET</u>
+    
+    **options**
+        
+        `users/:id/events?events=createdEvents` returns all the created events
+        `users/:id/events?events=eventsWillAttend` returns all the events that the user will attend
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
