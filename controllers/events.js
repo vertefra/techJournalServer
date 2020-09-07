@@ -128,4 +128,52 @@ router.get("/:id", (req, res) => {
     .select(req.query.events);
 });
 
+// ==================================================================== //
+//    Add one event to eventsWillAttend => /users/:id/events/:id  POST  //
+// ==================================================================== //
+//
+//  add an event with id events/:id to the eventsWillAttend array of
+//  the user with id users/:id
+
+router.post("/:id", (req, res) => {
+  const [user_id, post_id] = returnParams(req);
+  User.findByIdAndUpdate(
+    user_id,
+    {
+      $push: { eventsWillAttend: post_id },
+    },
+    (error, updatedUser) => {
+      updatedUser
+        ? res.status(200).json(updatedUser)
+        : res.status(404).json({
+            error: "cannot update user. is this a duplicated event? :" + error,
+          });
+    }
+  );
+});
+
+// =========================================================================== //
+//    Remove one event from eventsWillAttend => /users/:id/events/:id  DELETE  //
+// =========================================================================== //
+//
+//  Remove an event with id events/:id from the eventsWillAttend array of
+//  the user with id users/:id
+
+router.delete("/:id", (req, res) => {
+  const [user_id, post_id] = returnParams(req);
+  User.findByIdAndUpdate(
+    user_id,
+    {
+      $pull: { eventsWillAttend: post_id },
+    },
+    (error, updatedUser) => {
+      updatedUser
+        ? res.status(200).json(updatedUser)
+        : res.status(404).json({
+            error: "cannot delete user:" + error,
+          });
+    }
+  );
+});
+
 module.exports = router;
