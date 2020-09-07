@@ -11,6 +11,7 @@ const User = require("../models/user");
 // creates a new event associated with user with id users/:id
 // Add the reference of the event to the field createdEvents
 // for user users/:id
+//
 
 router.post("/", (req, res) => {
   user_id = returnParams(req)[0];
@@ -47,6 +48,38 @@ router.post("/", (req, res) => {
       }
     });
   }
+});
+
+// ======================================================== //
+//    See all the events     => /users/:id/events           //
+// ======================================================== //
+//
+// returns all the events associated with user
+//
+// OPTIONS:
+//
+//   ?events=eventsWillAttend => returns all the events the
+//                               the user will attend
+//
+//   ?events=createdEvents => returns all the events created
+//                                by the user
+//
+// eventsWillAttend is the default option
+//
+
+router.get("/", (req, res) => {
+  user_id = returnParams(req);
+  // set default if no option is avaiable
+  // to show the events that the user will attend
+  req.query.events = req.query.events ? req.query.events : "eventsWillAttend";
+  console.log(req.query.events);
+  User.findById(user_id, (error, foundUser) => {
+    foundUser
+      ? res.status(200).json(foundUser.createdEvents)
+      : res.status(404).json({ error: "user or events not founded: " + error });
+  })
+    .populate(req.query.events)
+    .select(req.query.events);
 });
 
 module.exports = router;
