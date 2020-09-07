@@ -73,7 +73,7 @@ app.use("/users/:id/skills", require("./controllers/userSkills"));
 // Controls: create, updates, delete for
 // events
 
-app.use("/users/:id/events", require("./controllers/events"));
+app.use("/users/:id/events", require("./controllers/userEvents"));
 
 /* End Controllers */
 
