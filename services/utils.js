@@ -101,8 +101,24 @@ const parseEventObject = (eventObj = {}) => {
   return errors === false ? eventObj : errorObj;
 };
 
+// =========================================== //
+//   paginate(array, maxPerPage, page)         //
+// =========================================== //
+//
+
+const paginate = (array, page, maxPerPage = 10) => {
+  page = page ? page : 1;
+  console.log("page is ", page);
+  console.log("max per page is", maxPerPage);
+  const begin = page * maxPerPage - maxPerPage;
+  const end = begin + maxPerPage;
+  console.log(begin, end);
+  return array.slice(begin, end);
+};
+
 module.exports = {
   parseEventObject,
   returnParams,
   addEntryRef,
+  paginate,
 };

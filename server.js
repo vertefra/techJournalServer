@@ -27,9 +27,9 @@ app.use(passport.initialize());
 
 /* Controllers */
 
-// =========================================== //
-//    USER CONTROLLER => /users                //
-// =========================================== //
+// ================================================== //
+//    USERS CONTROLLER => /users                      //
+// ================================================== //
 //
 // Controls: creates, updates, delete for User
 // model. /user/signup creates & aauthenticate
@@ -38,18 +38,18 @@ app.use(passport.initialize());
 
 app.use("/users", require("./controllers/users"));
 
-// =========================================== //
-//    ENTRIES CONTROLLER => /users/:id/entries //
-// =========================================== //
+// ================================================= //
+//    ENTRIES CONTROLLER => /users/:id/entries       //
+// ================================================= //
 //
 // Controls: create, udates, delete for entries
 // belonging to /users/:id.
 
 app.use("/users/:id/entries", require("./controllers/usersEntries"));
 
-// =========================================== //
-//    SKILLS CONTROLLER => /skills             //
-// =========================================== //
+// ================================================= //
+//    SKILLS CONTROLLER => /skills                   //
+// ================================================= //
 //
 // Controls: create, updates, delete for a
 // general skills database. User database will
@@ -57,21 +57,30 @@ app.use("/users/:id/entries", require("./controllers/usersEntries"));
 
 app.use("/skills", require("./controllers/skills"));
 
-// =========================================== //
-//   SKILLS CTRL ON USER => /users/:id/skills  //
-// =========================================== //
+// ================================================= //
+//   USERS/SKILLS CONTROLLER => /users/:id/skills    //
+// ================================================= //
 //
 // Controls: create, updates, delete for a
 // skills for a user with id = :id
 
 app.use("/users/:id/skills", require("./controllers/usersSkills"));
 
-// =========================================== //
-//   EVENTS CONTROLLER => /users/:id/events    //
-// =========================================== //
+// ================================================= //
+//   EVENTS CONTROLLER => /events                    //
+// ================================================= //
 //
 // Controls: create, updates, delete for
 // events
+
+app.use("/events", require("./controllers/events"));
+
+// ================================================= //
+//   USERS/EVENTS CONTROLLER => /users/:id/events    //
+// ================================================= //
+//
+// Controls: create, updates, delete for
+// events in related to a user with id = :id
 
 app.use("/users/:id/events", require("./controllers/usersEvents"));
 
