@@ -58,13 +58,24 @@ app.use("/users/:id/entries", require("./controllers/entries"));
 app.use("/skills", require("./controllers/skills"));
 
 // =========================================== //
-//   SKILLS CTRl ON USER => /users/:id/skills  //
+//   SKILLS CTRL ON USER => /users/:id/skills  //
 // =========================================== //
 //
 // Controls: create, updates, delete for a
 // skills for a user with id = :id
 
 app.use("/users/:id/skills", require("./controllers/userSkills"));
+
+// =========================================== //
+//   EVENTS CONTROLLER => /users/:id/events    //
+// =========================================== //
+//
+// Controls: create, updates, delete for
+// events
+
+app.use("/users/:id/events", require("./controllers/events"));
+
+/* End Controllers */
 
 /* Listener */
 app.listen(PORT, () => {

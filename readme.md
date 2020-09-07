@@ -7,9 +7,7 @@
 3. Francesco
 
 ## API endpoints
- 
- 
- 
+
 ###<u>users endpoints</u>
 
 #### /users/signup POST
@@ -31,19 +29,19 @@
 - returns information about a single user
 - optional query paramaters:
 
-    **populate**
+  **populate**
 
         - journalEntries
         - skills
+        - createdEvents
         - eventsWillAttend (still working on)
-    
-    this option will return the user object with this extra info connected
-    avoiding and extra call for them.
 
-    **Eg:** /users/5f5547055b287367b551a187**?populate=skills**
+  this option will return the user object with this extra info connected
+  avoiding and extra call for them.
 
-    will return something like this
+  **Eg:** /users/5f5547055b287367b551a187**?populate=skills**
 
+  will return something like this
 
         {
         "skills": [
@@ -74,30 +72,30 @@
         "updatedAt": "2020-09-06T21:36:01.571Z",
         "__v": 0,
         "journalEntries": "5f5547055b287367b551a188"
-    }
+
+  }
 
 #### /users POST
 
 - Create one user with the information provided in the object. Not really useful because there is
-already users/signup that does the same but with authentication
+  already users/signup that does the same but with authentication
 
 #### /users/:id PUT
 
 - Update the info about a user with an object with the user property.
-    
-    **Eg:** /users/5f5547055b287367b551a187 with a body with 
-            { name: "Marc" } will update the user document changing the
-            name with marc.
 
-    **IMPORTANT:** if you wanna change information like skills or journal entries use the dedicated
-    endpoints like **/users/5f5547055b287367b551a187/entries** or **/users/5f5547055b287367b551a187/skills** 
+  **Eg:** /users/5f5547055b287367b551a187 with a body with
+  { name: "Marc" } will update the user document changing the
+  name with marc.
 
-#### /users/:id DELETE 
+  **IMPORTANT:** if you wanna change information like skills or journal entries use the dedicated
+  endpoints like **/users/5f5547055b287367b551a187/entries** or **/users/5f5547055b287367b551a187/skills**
+
+#### /users/:id DELETE
 
 - delete an user and the associated entries. **Note:** removing a user wont remove the skills from teh skills document because skills are used globally and don't have a unique relation with the user like the entries do.
 
 ###<u>user entries endpoints</u>
-
 
 #### /users/:id/entries POST
 
@@ -107,7 +105,6 @@ already users/signup that does the same but with authentication
 #### /users/:id/entries GET
 
 - returns all the entries belonging to the user with id **users/:id** in the form of an array of objects
-
 
 #### /users/:id/entries/:id GET
 
@@ -121,10 +118,9 @@ already users/signup that does the same but with authentication
 
 - modify the entry with id **entries/:id** belonging to the user with id **users/:id**
 
-
 ###<u>user skills endpoints</u>
 
- **This endpoints affects the skills associated with a user**
+**This endpoints affects the skills associated with a user**
 
 #### /users/:id/skills GET
 
@@ -132,7 +128,7 @@ already users/signup that does the same but with authentication
 
 #### /users/:id/skills POST
 
-- store a new skill in the skill document if it's not already present, assign the reference to that skill to the user with id **/users/:id** 
+- store a new skill in the skill document if it's not already present, assign the reference to that skill to the user with id **/users/:id**
 - requires and object in the body with **skill** (string value required)
 
 #### /users/:id/skills/:id GET
@@ -142,14 +138,3 @@ already users/signup that does the same but with authentication
 #### /users/:id/skills/:id DELETE
 
 - delete the reference to the skill object for the skill with id **entries/:id** belonging to the user with id **users/:id** **Important** this will not remove the skill from the skill domcument.
-
-
-
-
-
-
-
-
-
-
-

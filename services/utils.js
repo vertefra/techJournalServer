@@ -46,7 +46,60 @@ const addEntryRef = (userId, cb) => {
   });
 };
 
+// =========================================== //
+//   parseEventObject(eventObj)                //
+// =========================================== //
+//
+// Check an event object for undefined fields
+// or missing keys
+
+const parseEventObject = (eventObj = {}) => {
+  let errors = false;
+  console.log("starting parser with object ", eventObj);
+  const requiredKeys = [
+    "owner_id",
+    "name",
+    "title",
+    "date",
+    "description",
+    "location",
+    "host",
+    "speaker",
+  ];
+  const errorObj = {
+    error: "found one or more errors with your object",
+    undefinedKeys: "",
+    wrongKeys: "",
+    missingKeys: "",
+  };
+  const eventKeys = Object.keys(eventObj);
+  eventKeys.forEach((key) => {
+    let errors = false;
+    if (requiredKeys.includes(key)) {
+      if (eventObj[key]) {
+        console.log(key, "is ok to me");
+      } else {
+        errorObj["undefinedKeys"] += `-${key}-`;
+        errors = true;
+      }
+    } else {
+      errorObj["wrongKeys"] += `-${key}-`;
+      errors = true;
+    }
+  });
+
+  requiredKeys.forEach((key) => {
+    if (!eventKeys.includes(key)) {
+      errorObj["missingKeys"] += `-${key}-`;
+      errors = true;
+    }
+  });
+
+  return errors === false ? eventObj : errorObj;
+};
+
 module.exports = {
+  parseEventObject,
   returnParams,
   addEntryRef,
 };

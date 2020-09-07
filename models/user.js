@@ -8,7 +8,8 @@ const UserSchema = new Schema(
     password: { type: String, required: true, select: true },
     journalEntries: { type: mongoose.Schema.Types.ObjectId, ref: "Entry" },
     skills: [{ type: mongoose.Schema.Types.ObjectId, ref: "Skill" }],
-    eventsWillAttend: [{ type: mongoose.Schema.Types.ObjectId, ref: "Events" }],
+    eventsWillAttend: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event" }],
+    createdEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event" }],
   },
   { timestamps: true }
 );
