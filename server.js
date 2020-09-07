@@ -45,7 +45,7 @@ app.use("/users", require("./controllers/users"));
 // Controls: create, udates, delete for entries
 // belonging to /users/:id.
 
-app.use("/users/:id/entries", require("./controllers/entries"));
+app.use("/users/:id/entries", require("./controllers/usersEntries"));
 
 // =========================================== //
 //    SKILLS CONTROLLER => /skills             //
@@ -64,7 +64,7 @@ app.use("/skills", require("./controllers/skills"));
 // Controls: create, updates, delete for a
 // skills for a user with id = :id
 
-app.use("/users/:id/skills", require("./controllers/userSkills"));
+app.use("/users/:id/skills", require("./controllers/usersSkills"));
 
 // =========================================== //
 //   EVENTS CONTROLLER => /users/:id/events    //
@@ -73,7 +73,7 @@ app.use("/users/:id/skills", require("./controllers/userSkills"));
 // Controls: create, updates, delete for
 // events
 
-app.use("/users/:id/events", require("./controllers/userEvents"));
+app.use("/users/:id/events", require("./controllers/usersEvents"));
 
 /* End Controllers */
 
