@@ -5,10 +5,17 @@ const UserSchema = new Schema(
   {
     name: { type: String, required: false },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true, select: true },
+    password: { type: String, required: true },
     journalEntries: { type: mongoose.Schema.Types.ObjectId, ref: "Entry" },
-    skills: [{ type: mongoose.Schema.Types.ObjectId, ref: "Skill" }],
-    eventsWillAttend: [{ type: mongoose.Schema.Types.ObjectId, ref: "Events" }],
+    skills: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Skill", unique: true },
+    ],
+    eventsWillAttend: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Event", unique: true },
+    ],
+    createdEvents: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Event", unique: true },
+    ],
   },
   { timestamps: true }
 );
