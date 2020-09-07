@@ -8,7 +8,7 @@
 
 ### live deployment
 
-[link](https://techjournalserver.herokuapp.com/)
+[https://techjournalserver.herokuapp.com/](https://techjournalserver.herokuapp.com/users)
 
 ## API endpoints
 
