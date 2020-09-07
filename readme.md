@@ -6,6 +6,10 @@
 2. Max Marker
 3. Francesco
 
+### live deployment
+
+[link](https://techjournalserver.herokuapp.com/)
+
 ## API endpoints
 
 ##<u>users endpoints</u>
