@@ -82,4 +82,50 @@ router.get("/", (req, res) => {
     .select(req.query.events);
 });
 
+// ======================================================== //
+//    Returns one event      => /users/:id/events/:id  GET  //
+// ======================================================== //
+//
+// OPTIONS:
+//
+//   ?events=eventsWillAttend => search the event in
+//                               eventsWillAttend
+//
+//   ?events=createdEvents => search the event in
+//                            createdEvents
+//
+// if no option is available searches the events in both the
+// field.
+//
+
+router.get("/:id", (req, res) => {
+  const [user_id, event_id] = returnParams(req);
+  req.query.events = req.query.events
+    ? req.query.events
+    : "eventsWillAttend createdEvents";
+  User.findById(user_id, (error, foundEvents) => {
+    if (foundEvents) {
+      foundEvents.eventsWillAttend = foundEvents.eventsWillAttend
+        ? foundEvents.eventsWillAttend
+        : [];
+      foundEvents.createdEvents = foundEvents.createdEvents
+        ? foundEvents.createdEvents
+        : [];
+      const events = [
+        ...foundEvents.eventsWillAttend,
+        ...foundEvents.createdEvents,
+      ];
+      console.log(events);
+      const event = events.find((evt) => {
+        return evt._id.toString() === event_id.toString();
+      });
+      res.status(200).json(event);
+    } else {
+      res.status(404).json({ error: "Could not find the user: ", error });
+    }
+  })
+    .populate(req.query.events)
+    .select(req.query.events);
+});
+
 module.exports = router;

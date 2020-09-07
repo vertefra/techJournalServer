@@ -15,6 +15,9 @@ const Entry = require("../models/entry");
 
 const returnParams = (req) => {
   const URL = req.originalUrl.split("/");
+  if (URL[4]) {
+    URL[4] = URL[4].split("?")[0]; // split the string in case of a query
+  }
   return URL[4] ? [URL[2], URL[4]] : [URL[2]];
 };
 
