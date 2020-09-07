@@ -106,7 +106,9 @@ router.get("/:id", (req, res) => {
     user
       ? res.status(200).json(user)
       : res.status(404).json({ error: "User not found: " + error });
-  }).select("-password");
+  })
+    .select("-password")
+    .populate(req.query.populate);
 });
 
 // =========================================== //
@@ -149,9 +151,6 @@ router.put("/:id", (req, res) => {
 
 router.delete("/:id", (req, res) => {
   User.findByIdAndDelete(req.params.id, (error, deletedUser) => {
-    // deletedUser
-    //   ? res.status(200).json(deletedUser)
-    //   :
     if (deletedUser) {
       Entry.findByIdAndDelete(
         deletedUser.journalEntries,
