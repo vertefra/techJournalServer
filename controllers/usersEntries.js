@@ -1,5 +1,5 @@
 const express = require("express");
-const { returnParams } = require("../services/utils");
+const { returnParams, paginate } = require("../services/utils");
 // const { v4: uuidv4 } = require("uuid");
 const router = express.Router();
 const Entry = require("../models/entry");
@@ -14,12 +14,21 @@ const Entry = require("../models/entry");
 // in services/utils.js
 
 router.get("/", (req, res) => {
+  console.log("TESTING ROUTE");
   const user_id = returnParams(req)[0];
   console.log(user_id);
   Entry.findOne({ user_id }, (error, entry) => {
-    entry
-      ? res.status(200).json({ entries: entry.entries })
-      : res.status(404).json({ error: "Entry not found: " + error });
+    if (entry) {
+      console.log(entry.entries);
+      const entries = paginate(
+        entry.entries,
+        req.query.page,
+        req.query.display
+      );
+      res.status(200).json({ entries });
+    } else {
+      res.status(404).json({ error: "Entry not found: " + error });
+    }
   });
 });
 
