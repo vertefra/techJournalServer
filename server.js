@@ -7,6 +7,9 @@ const mongoose = require("mongoose");
 const path = require("path");
 const cors = require("cors");
 const passport = require("./services/passport")();
+const Event = require("./models/event");
+const Skill = require("./models/skill");
+const { mockEvent } = require("./services/utils");
 
 /* Database */
 const MONGODB_URI = process.env.MONGODB_URI;

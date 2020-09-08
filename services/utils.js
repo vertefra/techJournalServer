@@ -122,7 +122,36 @@ const paginate = (array, page, maxPerPage = 10) => {
   return array.slice(begin, end);
 };
 
+// =========================================== //
+//   mock event structure                      //
+// =========================================== //
+//
+
+const mockEvent = {
+  title: "Mock Event",
+  name: "this event",
+  description: "a fun event",
+  date: "26 april",
+  location: "New York",
+  host: {
+    name: "francesco",
+    title: "yep",
+    email: "verte.fra@gmail.com",
+    phoneNumber: "3334444545",
+  },
+  speaker: {
+    name: "Max",
+    title: "Doctor",
+  },
+};
+
+const event_filtered_id = "5f57ba0607110e71d1bff7b6";
+const skills_filtered_id = "5f57bac3f923067281069ef1";
+
 module.exports = {
+  event_filtered_id,
+  skills_filtered_id,
+  mockEvent,
   parseEventObject,
   returnParams,
   addEntryRef,

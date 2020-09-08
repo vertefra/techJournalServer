@@ -5,8 +5,10 @@ const bcrypt = require("bcrypt");
 const passport = require("../services/passport");
 const config = require("../services/config");
 const User = require("../models/user");
-const { addEntryRef } = require("../services/utils");
+const { addEntryRef, event_filtered_id } = require("../services/utils");
 const Entry = require("../models/entry");
+// const { skills_filtered_id } = require("../services/utils");
+// const { events_filtered_id } = require("../services/utils");
 
 router.post("/signup", (req, res) => {
   const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -17,10 +19,11 @@ router.post("/signup", (req, res) => {
       bcrypt.genSaltSync(10)
     );
 
-    User.findOne({ email: req.body.email }, (user) => {
+    User.findOne({ email: req.body.email }, (error, user) => {
       console.log("========findOne=======", user);
       if (!user) {
         console.log("Running create user");
+        console.log(req.body);
         User.create(req.body, (error, createdUser) => {
           if (createdUser) {
             addEntryRef(createdUser._id, (error, updatedUser) => {
@@ -38,13 +41,13 @@ router.post("/signup", (req, res) => {
               }
             });
           } else {
-            res.status(401).json({ error: "failed to create user" });
+            res.status(401).json({ error: "failed to create user: " + error });
           }
         });
       } else {
-        res
-          .status(401)
-          .json({ error: "User already exists, try logging in instead" });
+        res.status(401).json({
+          error: "User already exists, try logging in instead: " + error,
+        });
       }
     });
   } else {
@@ -71,7 +74,7 @@ router.post("/login", (req, res) => {
           user.password = undefined; // erasing password
           res.json({ token: token, user: user }); // sending also the user data with the token to client
         } else {
-          res.sendStatus(401).json({ error: "Wrong password" });
+          res.status(401).json({ error: "Wrong password" });
         }
       } else {
         console.log("Couldn't find user. Try signing up.");
