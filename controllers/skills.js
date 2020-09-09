@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Skill = require("../models/skill.js");
-const { skills_filtered_id } = require("../services/utils.js");
 
 // =========================================== //
 //    Get all the skills => /skills GET        //
@@ -46,12 +45,21 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
   // all lowercase
   req.body.skill = req.body.skill.toLowerCase();
-  Skill.create(req.body, (error, createdSkill) => {
-    createdSkill
-      ? res.status(200).json(createdSkill)
-      : res
-          .status(500)
-          .json({ error: "failed creating a new Skill: " + error });
+  Skill.findOne({ skill: req.body.skill }, (notFound, found) => {
+    if (found) {
+      res.status(401).json({
+        error:
+          "skill already in the database. you can add it to events or users",
+      });
+    } else {
+      Skill.create(req.body, (error, createdSkill) => {
+        createdSkill
+          ? res.status(200).json(createdSkill)
+          : res
+              .status(500)
+              .json({ error: "failed creating a new Skill: " + error });
+      });
+    }
   });
 });
 
