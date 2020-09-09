@@ -2,6 +2,7 @@ const express = require("express");
 const Skill = require("../models/skill");
 const Event = require("../models/event");
 const { returnParams } = require("../services/utils");
+const User = require("../models/user");
 const router = express.Router();
 
 // =================================================== //
@@ -17,21 +18,41 @@ router.post("/", (req, res) => {
   const skill = req.body.skill.toLowerCase();
   Skill.findOne({ skill }, (error, foundSkill) => {
     if (foundSkill) {
-      // if the skill is found add the reference to the event
-      Event.findByIdAndUpdate(
-        event_id,
-        { $push: { topics: foundSkill._id } },
-        (error, foundEvent) => {
-          if (foundEvent) {
-            res.status(200).json({
-              message:
-                "skill reference added correctly to event: " + foundEvent,
-            });
+      // if the skill is found check the user doesn not have already a reference to it
+      Event.findById(event_id, (error, topicsArray) => {
+        if (topicsArray.topics) {
+          console.log(
+            "these are the topics found for this event: ",
+            topicsArray.topics
+          );
+          const skill = topicsArray.topics.find(
+            (topic) => topic._id.toString() === foundSkill._id.toString()
+          );
+          console.log("I found this skill=>", skill);
+          if (!skill) {
+            Event.findByIdAndUpdate(
+              event_id,
+              { $push: { topics: foundSkill._id } },
+              (error, foundEvent) => {
+                if (foundEvent) {
+                  res.status(200).json({
+                    message:
+                      "skill reference added correctly to event: " + foundEvent,
+                  });
+                } else {
+                  res.status(404).json("Event not found: " + error);
+                }
+              }
+            );
           } else {
-            res.status(404).json("Event not found: " + error);
+            res
+              .status(404)
+              .json({ error: "skill is already present " + skill });
           }
+        } else {
+          res.status(404).json({ error: "event not found" + error });
         }
-      );
+      }).select("topics");
     } else {
       // skill was not found, create a new one with that name
       Skill.create({ skill }, (error, createdSkill) => {
