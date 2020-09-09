@@ -25,6 +25,7 @@ router.get("/", (req, res) => {
         req.query.page,
         req.query.display
       );
+      console.log(entries);
       res.status(200).json({ entries });
     } else {
       res.status(404).json({ error: "Entry not found: " + error });

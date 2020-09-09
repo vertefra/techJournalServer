@@ -53,7 +53,6 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
   const user_id = returnParams(req)[0];
   const skill = req.body.skill.toLowerCase();
-  console.log("Adding skill ==> ", skill);
   Skill.findOne({ skill }, (error, foundSkill) => {
     if (foundSkill) {
       User.findByIdAndUpdate(
