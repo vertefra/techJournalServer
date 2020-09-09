@@ -78,13 +78,29 @@ router.delete("/:id", (req, res) => {
         ? res
             .status(200)
             .json({ message: "reference to skill removed: " + updatedEvent })
-        : res
-            .status(500)
-            .json({
-              error: "copuld not remove the reference to skill: " + error,
-            });
+        : res.status(500).json({
+            error: "copuld not remove the reference to skill: " + error,
+          });
     }
   );
+});
+
+// ======================================================= //
+//    See all the skills => /events/:id/skills GET         //
+// ======================================================= //
+//
+// Show all the skills associated with an event with id
+// events/:id
+
+router.get("/", (req, res) => {
+  const event_id = returnParams(req)[0];
+  Event.findById(event_id, (error, foundSkills) => {
+    foundSkills
+      ? res.status(200).json(foundSkills)
+      : res.status(404).json({ error: "could not find the skills: " + error });
+  })
+    .populate("topics")
+    .select("topics");
 });
 
 module.exports = router;
