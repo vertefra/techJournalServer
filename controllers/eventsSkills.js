@@ -61,4 +61,30 @@ router.post("/", (req, res) => {
   });
 });
 
+// ======================================================= //
+//    Remove one skill => /events/:id/skills/:id DELETE    //
+// ======================================================= //
+//
+// Remove the reference of the skill with id skills/:id
+// from the event events/:id
+
+router.delete("/:id", (req, res) => {
+  const [event_id, skill_id] = returnParams(req);
+  Event.findByIdAndUpdate(
+    event_id,
+    { $pull: { topics: skill_id } },
+    (error, updatedEvent) => {
+      updatedEvent
+        ? res
+            .status(200)
+            .json({ message: "reference to skill removed: " + updatedEvent })
+        : res
+            .status(500)
+            .json({
+              error: "copuld not remove the reference to skill: " + error,
+            });
+    }
+  );
+});
+
 module.exports = router;
