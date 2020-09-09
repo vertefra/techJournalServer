@@ -47,6 +47,12 @@ router.get("/:id", (req, res) => {
 // first look into the Skill model to check if the skill
 // is already present. If not creates a new skill and add
 // the id of the created skill to the user in 'skills'
+//
+// Skill should be added inside body with a json object
+//
+// { skill: "javascrip" }
+//
+// i
 
 // TODO ADDING A COUNT INCREMENT TO SHOW SKILLS POPOLARITY
 
