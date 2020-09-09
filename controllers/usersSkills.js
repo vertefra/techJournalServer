@@ -61,17 +61,30 @@ router.post("/", (req, res) => {
   const skill = req.body.skill.toLowerCase();
   Skill.findOne({ skill }, (error, foundSkill) => {
     if (foundSkill) {
-      User.findByIdAndUpdate(
-        user_id,
-        { $push: { skills: foundSkill._id } },
-        (error, updatedUser) => {
-          updatedUser
-            ? res.status(200).json({ updatedUser: true, result: updatedUser })
-            : res
-                .status(500)
-                .json({ error: "Could not update the skill: " + error });
+      //if the skill is found lets chek if the user already has a reference to it
+      User.findById(user_id, (skillNotFound, skillFound) => {
+        if (skillFound) {
+          // return error message
+          res
+            .status(404)
+            .json({ error: "skills alredy present: " + skillFound });
+        } else {
+          // skill was not found in the user skills, we can add it
+          User.findByIdAndUpdate(
+            user_id,
+            { $push: { skills: foundSkill._id } },
+            (error, updatedUser) => {
+              updatedUser
+                ? res
+                    .status(200)
+                    .json({ updatedUser: true, result: updatedUser })
+                : res
+                    .status(500)
+                    .json({ error: "Could not update the skill: " + error });
+            }
+          );
         }
-      );
+      }).select("skills");
     } else {
       // if the skill does not exist create it
       console.log("Skill not found. adding ", skill);
