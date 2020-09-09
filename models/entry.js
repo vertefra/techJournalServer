@@ -7,6 +7,7 @@ const EntrySchema = new Schema(
       {
         title: { type: String, required: true },
         content: { type: String, required: true },
+        createdAt: { type: Date, default: Date.now },
       },
     ],
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

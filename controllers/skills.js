@@ -1,17 +1,30 @@
 const express = require("express");
 const router = express.Router();
 const Skill = require("../models/skill.js");
+const { skills_filtered_id } = require("../services/utils.js");
 
 // =========================================== //
 //    Get all the skills => /skills GET        //
 // =========================================== //
 
 router.get("/", (req, res) => {
-  Skill.find({}, (error, allSkills) => {
-    allSkills
-      ? res.status(200).json(allSkills)
-      : res.status(404).json({ error: "Skills not found: " + error });
-  });
+  if (!req.query.regex) {
+    console.log("not regex");
+    Skill.find({}, (error, allSkills) => {
+      allSkills
+        ? res.status(200).json(allSkills)
+        : res.status(404).json({ error: "Skills not found: " + error });
+    });
+  } else {
+    Skill.find(
+      { skill: { $regex: req.query.regex, $option: "i" } },
+      (error, searchResult) => {
+        searchResult
+          ? res.status(200).json({ searchResult })
+          : res.status(404).json({ error });
+      }
+    );
+  }
 });
 
 // =========================================== //

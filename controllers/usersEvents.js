@@ -137,6 +137,7 @@ router.get("/:id", (req, res) => {
 
 router.post("/:id", (req, res) => {
   const [user_id, post_id] = returnParams(req);
+  console.log(post_id);
   User.findByIdAndUpdate(
     user_id,
     {
