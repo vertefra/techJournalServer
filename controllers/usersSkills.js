@@ -62,27 +62,41 @@ router.post("/", (req, res) => {
   Skill.findOne({ skill }, (error, foundSkill) => {
     if (foundSkill) {
       //if the skill is found lets chek if the user already has a reference to it
-      User.findById(user_id, (skillNotFound, skillFound) => {
-        if (skillFound) {
-          // return error message
-          res
-            .status(404)
-            .json({ error: "skills alredy present: " + skillFound });
-        } else {
-          // skill was not found in the user skills, we can add it
-          User.findByIdAndUpdate(
-            user_id,
-            { $push: { skills: foundSkill._id } },
-            (error, updatedUser) => {
-              updatedUser
-                ? res
-                    .status(200)
-                    .json({ updatedUser: true, result: updatedUser })
-                : res
-                    .status(500)
-                    .json({ error: "Could not update the skill: " + error });
-            }
+      User.findById(user_id, (error, skillsArray) => {
+        if (skillsArray.skills) {
+          console.log(
+            "this shopuld be the array  with all the user skills ",
+            skillsArray.skills
           );
+          console.log(
+            "Im checking if the array contains foundSkill._id: ",
+            foundSkill._id.toString()
+          );
+          const skill = skillsArray.skills.find(
+            (skill) => skill._id.toString() === foundSkill._id.toString()
+          );
+          console.log("I found this skill=> ", skill);
+          if (!skill) {
+            User.findByIdAndUpdate(
+              user_id,
+              { $push: { skills: foundSkill._id } },
+              (error, updatedUser) => {
+                updatedUser
+                  ? res
+                      .status(200)
+                      .json({ updatedUser: true, result: updatedUser })
+                  : res
+                      .status(500)
+                      .json({ error: "Could not update the skill: " + error });
+              }
+            );
+          } else {
+            res
+              .status(404)
+              .json({ error: "skill is already present " + skill });
+          }
+        } else {
+          res.status(404).json({ error: "user not found" + error });
         }
       }).select("skills");
     } else {
