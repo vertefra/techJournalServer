@@ -87,6 +87,15 @@ app.use("/events", require("./controllers/events"));
 
 app.use("/users/:id/events", require("./controllers/usersEvents"));
 
+// ================================================= //
+//   EVENTS/SKILLS CONTROLLER => /events/:id/skills  //
+// ================================================= //
+//
+// controls: add create and remove skills for specific
+// events
+
+app.use("/events/:id/skills", require("./controllers/eventsSkills"));
+
 /* End Controllers */
 
 /* Listener */
