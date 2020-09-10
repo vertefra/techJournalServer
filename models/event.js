@@ -5,7 +5,12 @@ const EventSchema = new Schema({
   title: { type: String, required: true },
   date: { type: Date, required: true },
   description: { type: String, required: true },
-  location: { type: String, required: true },
+  location: {
+    name: String,
+    formatted_address: String,
+    lat: String,
+    lng: String,
+  },
   topics: [{ type: Schema.Types.ObjectId, ref: "Skill" }],
   host: {
     name: String,

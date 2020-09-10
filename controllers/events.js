@@ -83,7 +83,7 @@ router.put("/:id", (req, res) => {
 });
 
 // ========================================================== //
-//    Delete one Event  => /events/:id?user_id=id PUT DELETE  //
+//    Delete one Event  => /events/:id?user_id=id  DELETE  //
 // ========================================================== //
 //
 //

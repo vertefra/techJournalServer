@@ -17,10 +17,12 @@ router.post("/", (req, res) => {
   user_id = returnParams(req)[0];
   req.body.owner_id = user_id;
   const event = parseEventObject(req.body);
+  console.log("event after parsing", event);
   if (event.error) {
     res.status(400).json({ error: event });
   } else {
     Event.create(req.body, (error, createdEvent) => {
+      console.log(createdEvent);
       if (createdEvent) {
         // find the user and add the event to the list of createdEvents
         User.findByIdAndUpdate(
@@ -42,6 +44,7 @@ router.post("/", (req, res) => {
           }
         );
       } else {
+        console.log(error);
         res
           .status(500)
           .json({ error: "failed in creating a new event: ", error });
