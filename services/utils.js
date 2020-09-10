@@ -63,13 +63,13 @@ const parseEventObject = (eventObj = {}) => {
   console.log();
   const requiredKeys = [
     "owner_id",
-    "name",
     "title",
     "date",
     "description",
     "location",
     "host",
     "speaker",
+    "topics",
   ];
   const errorObj = {
     error: "found one or more errors with your object",
