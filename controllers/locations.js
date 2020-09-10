@@ -25,4 +25,8 @@ router.get("/", (req, res) => {
   })();
 });
 
+router.get("/key", (req, res) => {
+  res.status(200).json({ key: process.env.MAPS_KEY });
+});
+
 module.exports = router;
