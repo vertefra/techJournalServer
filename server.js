@@ -96,6 +96,15 @@ app.use("/users/:id/events", require("./controllers/usersEvents"));
 
 app.use("/events/:id/skills", require("./controllers/eventsSkills"));
 
+// ================================================= //
+//   LOCATIONS CONTROLLER => /locations              //
+// ================================================= //
+//
+// using google maps api, looks for places
+//
+
+app.use("/locations", require("./controllers/locations"));
+
 /* End Controllers */
 
 /* Listener */
