@@ -77,8 +77,9 @@ router.get("/", (req, res) => {
   req.query.events = req.query.events ? req.query.events : "eventsWillAttend";
   console.log(req.query.events);
   User.findById(user_id, (error, foundUser) => {
+    console.log(foundUser);
     foundUser
-      ? res.status(200).json(foundUser.createdEvents)
+      ? res.status(200).json(foundUser[req.query.events])
       : res.status(404).json({ error: "user or events not founded: " + error });
   })
     .populate(req.query.events)
